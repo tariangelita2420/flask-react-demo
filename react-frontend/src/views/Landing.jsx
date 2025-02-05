@@ -33,12 +33,12 @@ export default function LandingPage() {
 
     return (
         <div className={styles['landing-main']} style={{ backgroundImage: `url(${background})`}}>
+            <div className={styles['nav']}>
             <a href="/">
-                <div className={styles['nav']}>
-                    <img src={logo} height={80}></img>
-                    <h2 className={styles['nav-text']}>sunrise w sarv</h2>
-                </div>
-            </a>
+                <img src={logo} height={80}></img>
+                </a>
+                <h2 className={styles['nav-text']}>sunrise w sarv</h2>
+            </div>
             
             <div className={styles['header-div']}>
                 <h2 className={styles['heading']}>calculate the quality of a sunrise</h2>
