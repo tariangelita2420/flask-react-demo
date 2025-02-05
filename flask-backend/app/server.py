@@ -5,11 +5,13 @@ import os
 from dotenv import load_dotenv
 import requests
 import datetime
+import pytz
 import sqlite3
 
 # Set up Flask App to receive requests
 app = Flask(__name__)
 
+# To allow CORS from our frontend - should probably only allow for a patricular domain...
 CORS(app)
 
 
@@ -64,10 +66,17 @@ def getWeather():
     city = request.args.get('city')
     state = request.args.get('state')
     country = request.args.get('country')
+    
+    # International Forecast - state shouldn't be passed to API call
+    if (state == None):
+        payload = {'q': f"{city},{country}", 'limit': 3, 'appid' : APIkey}
+    else:
+        payload = {'q': f"{city},{state},{country}", 'limit': 3, 'appid' : APIkey}
 
-    payload = {'q': f"{city},{state},{country}", 'limit': 3, 'appid' : APIkey}
     response = requests.get(base_url, params=payload)
     
+    # To return back three days of forecast
+    alldata = []
     # json method of response object 
     res = response.json()
     if res:
@@ -83,45 +92,55 @@ def getWeather():
 
         # try returning weather_res to see what the OpenWeatherMap API actually returns to you
         weather_res = response.json()
-        
-        weather_daily = weather_res['daily'][1]
-        # consolidating the large weather json for fields that only matter for sunrise
-        weather_obj = {}
-        weather_obj['cloudiness'] = weather_daily['clouds']
-        weather_obj['dewpoint'] = round(weather_daily['dew_point'])
-        weather_obj['date'] = datetime.datetime.fromtimestamp(weather_daily['dt']).strftime('%d %B, %Y') # Converts a UTC Unix timestamp to a string
-        weather_obj['windspeed'] = round(weather_daily['wind_speed'])
-        weather_obj['sunrisetime'] = datetime.datetime.fromtimestamp(weather_daily['sunrise']).strftime('%I:%M')
-        weather_obj['temperature'] = round(weather_daily['temp']['morn'])
-        weather_obj['feelslike'] = round(weather_daily['feels_like']['morn'])
-        weather_obj['weather'] = weather_daily['weather'][0]
-        weather_obj['city'] = city
 
-        
-        if weather_obj['cloudiness'] < 20:
-            SUNRISE_SCORE += 0.4
-        elif weather_obj['cloudiness'] < 40:
-            SUNRISE_SCORE += 0.2
-        elif weather_obj['cloudiness'] < 60:
-            SUNRISE_SCORE += 0.1
+        # forecast for tomorrow, day after and next week
+        days = [1, 2, 7]
+        for ind in days:
+            weather_daily = weather_res['daily'][ind]
+            # consolidating the large weather json for fields that only matter for sunrise
+            weather_obj = {}
+            weather_obj['cloudiness'] = weather_daily['clouds']
+            weather_obj['dewpoint'] = round(weather_daily['dew_point'])
 
-        if weather_obj['dewpoint'] < 10:
-            SUNRISE_SCORE += 0.2
-        elif weather_obj['dewpoint'] < 20:
-            SUNRISE_SCORE += 0.1
+            # to ensure that UTC time is being converted to local timezone for sunrise
+            local_tz = pytz.timezone(weather_res['timezone'])
+            time_local = datetime.datetime.fromtimestamp(weather_daily['sunrise']).astimezone(local_tz)
+            weather_obj['sunrisetime'] = time_local.strftime('%I:%M')
+            
+            weather_obj['date'] = datetime.datetime.fromtimestamp(weather_daily['dt']).strftime('%d %B, %Y') # Converts a UTC Unix timestamp to a string
+            weather_obj['windspeed'] = round(weather_daily['wind_speed'])
+            weather_obj['temperature'] = round(weather_daily['temp']['morn'])
+            weather_obj['feelslike'] = round(weather_daily['feels_like']['morn'])
+            weather_obj['weather'] = weather_daily['weather'][0]
+            weather_obj['city'] = city
 
-        if weather_obj['windspeed'] < 6:
-            SUNRISE_SCORE += 0.2
-        elif weather_obj['windspeed'] < 12:
-            SUNRISE_SCORE += 0.1
-        
-        if weather_obj['weather']['id'] == 800:
-            SUNRISE_SCORE += 0.2
-        elif weather_obj['weather']['id'] == 801:
-            SUNRISE_SCORE += 0.1
-        
-        weather_obj['score'] = SUNRISE_SCORE
-        return weather_obj
+            
+            if weather_obj['cloudiness'] < 20:
+                SUNRISE_SCORE += 0.4
+            elif weather_obj['cloudiness'] < 40:
+                SUNRISE_SCORE += 0.2
+            elif weather_obj['cloudiness'] < 60:
+                SUNRISE_SCORE += 0.1
+
+            if weather_obj['dewpoint'] < 10:
+                SUNRISE_SCORE += 0.2
+            elif weather_obj['dewpoint'] < 20:
+                SUNRISE_SCORE += 0.1
+
+            if weather_obj['windspeed'] < 6:
+                SUNRISE_SCORE += 0.2
+            elif weather_obj['windspeed'] < 12:
+                SUNRISE_SCORE += 0.1
+            
+            if weather_obj['weather']['id'] == 800:
+                SUNRISE_SCORE += 0.2
+            elif weather_obj['weather']['id'] == 801:
+                SUNRISE_SCORE += 0.1
+            
+            weather_obj['score'] = SUNRISE_SCORE
+            alldata.append(weather_obj)
+
+        return alldata
     else:
         return "API Error"
 
