@@ -1,4 +1,5 @@
-import background from "../assets/sunsetbg.png";
+import background from "../assets/sky.png";
+import logo from '../assets/logo.png';
 import styles from './Landing.module.css';
 import { useState } from "react";
 import { useNavigate } from "react-router";
@@ -32,25 +33,34 @@ export default function LandingPage() {
 
     return (
         <div className={styles['landing-main']} style={{ backgroundImage: `url(${background})`}}>
+            <a href="/">
+                <div className={styles['nav']}>
+                    <img src={logo} height={80}></img>
+                    <h2 className={styles['nav-text']}>sunrise w sarv</h2>
+                </div>
+            </a>
+            
             <div className={styles['header-div']}>
-                <h2 className={styles['heading']}>Calculate Quality of Sunrise!</h2>
+                <h2 className={styles['heading']}>calculate the quality of a sunrise</h2>
                 <form onSubmit={getWeatherData}>
                     <div className={styles['input-container']}>
-                        <label>City: </label>
+                        <label>city</label>
                         <input type="text" id="city" name="city" placeholder="Enter your city" required onChange={(e) => setCity(e.target.value)}/>
                     </div>
 
                     <div className={styles['input-container']}>
-                        <label>State Abbreviation: </label>
+                        <label>state (us only) </label>
                         <input type="text" id="state" name="state" placeholder="Enter your state"  onChange={(e) => setState(e.target.value)}/>
                     </div>
 
                     <div className={styles['input-container']}>
-                        <label>Country Code: </label>
+                        <label>country</label>
                         <input type="text" id="country" name="country" placeholder="Enter your country code" required  onChange={(e) => setCountry(e.target.value)}/>
                     </div>
+                    <div className={styles['button-container']}>
+                        <button type="submit">calculate!</button>
 
-                    <button type="submit">Submit</button>
+                    </div>
                 </form>
             </div>
         </div>
