@@ -63,12 +63,15 @@ This document assumes that you are starting from a *blank slate*. Feel free to s
 - To *actually* get the app working, set up an account on [OpenWeatherMap's official website](https://openweathermap.org/api) and subscribe to the One Call API 3.0 to get access an API key and make requests.
 - Under flask-backend>app create a file named **.env** with the contents with the following contents : `WEATHER_API_KEY=<insert your API key here>`. .env files are to hold secrets like your API keys and should be ignored by git.
 
+## Designing User Interface
+I like starting from Figma when I build web apps. This is not a UI/UX course but if you are interested here is the [Figma Design](https://www.figma.com/design/9wx5ambCgODaaJMdX5H1c6/rise-and-shine?node-id=0-1&t=SF738ptgADYMy1qQ-1) I created for my frontend.
 
 ## Some resources I used:
 This can help you start your own frontend and backend from a blank repository
 - [Flask Intro](https://python-adv-web-apps.readthedocs.io/en/latest/flask.html)
 - [Flask Tutorial](https://flask.palletsprojects.com/en/stable/tutorial/layout/)
 - [Building a REST API with Flask](https://auth0.com/blog/developing-restful-apis-with-python-and-flask/)
+- [Setting up a SQL Database with Python Flask](https://www.digitalocean.com/community/tutorials/how-to-use-an-sqlite-database-in-a-flask-application)
 - [Set up your React Project with Vite](https://vite.dev/guide/)
 
 
