@@ -1,21 +1,21 @@
 import background from "../assets/sky.png";
 import logo from '../assets/logo.png';
 import styles from './Landing.module.css';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 
 export default function LandingPage() {
 
     const [city, setCity] = useState("")
     const [state, setState] = useState("NA")
-    const [country, setCountry] = useState("")
+    const [country, setCountry] = useState("US")
+    const [allStates, setAllStates] = useState([])
+    const [allCountries, setAllCountries] = useState([])
 
     const navigate = useNavigate();
 
     const getWeatherData = async (e) => {
         e.preventDefault()
-
-        console.log(city, state, country)
         try {
             const response = await fetch(`http://localhost:5000/weather?state=${state}&city=${city}&country=${country}`, {
                 method : 'GET'
@@ -30,6 +30,27 @@ export default function LandingPage() {
             console.log(err)
         }
     }
+
+    const getLocations = async () => {
+        try {
+            const response = await fetch(`http://localhost:5000/locations`, {
+                method : 'GET'
+            })
+            if (!response.ok) {
+                throw new Error('Error in fetching Data')
+            }
+            const res = await response.json()
+            setAllStates(res.states)
+            setAllCountries(res.countries)
+           
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+    useEffect( () => {
+        getLocations()
+    }, [])
 
     return (
         <div className={styles['landing-main']} style={{ backgroundImage: `url(${background})`}}>
@@ -50,12 +71,28 @@ export default function LandingPage() {
 
                     <div className={styles['input-container']}>
                         <label>state (us only) </label>
-                        <input type="text" id="state" name="state" placeholder="Enter your state"  onChange={(e) => setState(e.target.value)}/>
+                        <select id="state" name="state" value={state}  onChange={(e) => setState(e.target.value)}>
+                            {allStates.map((option) => {
+                                return (
+                                    <option key={option} value={option[2]}>
+                                    {option[1]}
+                                    </option>
+                                )
+                            })}
+                        </select>
                     </div>
 
                     <div className={styles['input-container']}>
                         <label>country</label>
-                        <input type="text" id="country" name="country" placeholder="Enter your country code" required  onChange={(e) => setCountry(e.target.value)}/>
+                        <select id="country" name="country" value={country}  onChange={(e) => setCountry(e.target.value)}>
+                            {allCountries.map((option) => {
+                                return (
+                                    <option key={option} value={option[2]}>
+                                    {option[1]}
+                                    </option>
+                                )
+                            })}
+                        </select>
                     </div>
                     <div className={styles['button-container']}>
                         <button type="submit">calculate!</button>

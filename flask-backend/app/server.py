@@ -66,15 +66,16 @@ def getWeather():
     city = request.args.get('city')
     state = request.args.get('state')
     country = request.args.get('country')
-    
     # International Forecast - state shouldn't be passed to API call
-    if (state == None):
+    if (state == "NA" or country != "US"):
         payload = {'q': f"{city},{country}", 'limit': 3, 'appid' : APIkey}
     else:
         payload = {'q': f"{city},{state},{country}", 'limit': 3, 'appid' : APIkey}
 
     response = requests.get(base_url, params=payload)
     
+    result = {}
+    result['city'] = city
     # To return back three days of forecast
     alldata = []
     # json method of response object 
@@ -107,40 +108,48 @@ def getWeather():
             time_local = datetime.datetime.fromtimestamp(weather_daily['sunrise']).astimezone(local_tz)
             weather_obj['sunrisetime'] = time_local.strftime('%I:%M')
             
-            weather_obj['date'] = datetime.datetime.fromtimestamp(weather_daily['dt']).strftime('%d %B, %Y') # Converts a UTC Unix timestamp to a string
+            weather_obj['date'] = datetime.datetime.fromtimestamp(weather_daily['dt']).strftime('%d %b') # Converts a UTC Unix timestamp to a string
             weather_obj['windspeed'] = round(weather_daily['wind_speed'])
             weather_obj['temperature'] = round(weather_daily['temp']['morn'])
             weather_obj['feelslike'] = round(weather_daily['feels_like']['morn'])
             weather_obj['weather'] = weather_daily['weather'][0]
-            weather_obj['city'] = city
 
             
-            if weather_obj['cloudiness'] < 20:
+            if weather_obj['cloudiness'] < 10:
                 SUNRISE_SCORE += 0.4
+            elif weather_obj['cloudiness'] < 20:
+                SUNRISE_SCORE += 0.3
             elif weather_obj['cloudiness'] < 40:
                 SUNRISE_SCORE += 0.2
             elif weather_obj['cloudiness'] < 60:
                 SUNRISE_SCORE += 0.1
 
-            if weather_obj['dewpoint'] < 10:
+            if weather_obj['dewpoint'] < 41:
+                SUNRISE_SCORE += 0.3
+            elif weather_obj['dewpoint'] < 50:
                 SUNRISE_SCORE += 0.2
-            elif weather_obj['dewpoint'] < 20:
+            elif weather_obj['dewpoint'] < 59:
                 SUNRISE_SCORE += 0.1
 
-            if weather_obj['windspeed'] < 6:
+            if weather_obj['windspeed'] < 5:
+                SUNRISE_SCORE += 0.3
+            elif weather_obj['windspeed'] < 10:
                 SUNRISE_SCORE += 0.2
-            elif weather_obj['windspeed'] < 12:
+            elif weather_obj['windspeed'] < 15:
                 SUNRISE_SCORE += 0.1
             
             if weather_obj['weather']['id'] == 800:
-                SUNRISE_SCORE += 0.2
+                SUNRISE_SCORE += 0.3
             elif weather_obj['weather']['id'] == 801:
+                SUNRISE_SCORE += 0.2
+            elif weather_obj['weather']['id'] == 802:
                 SUNRISE_SCORE += 0.1
             
             weather_obj['score'] = SUNRISE_SCORE
             alldata.append(weather_obj)
 
-        return alldata
+        result['weather'] = alldata
+        return result
     else:
         return "API Error"
 

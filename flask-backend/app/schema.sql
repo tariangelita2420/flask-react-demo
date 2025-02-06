@@ -65,7 +65,7 @@ INSERT INTO states (name, abbreviation) VALUES('West Virginia', 'WV');
 INSERT INTO states (name, abbreviation) VALUES('Wisconsin', 'WI');
 INSERT INTO states (name, abbreviation) VALUES('Wyoming', 'WY');
 
-
+INSERT INTO countries (name, code) VALUES('United States of America', 'US');
 INSERT INTO countries (name, code) VALUES('Afghanistan', 'AF');
 INSERT INTO countries (name, code) VALUES('Albania', 'AL');
 INSERT INTO countries (name, code) VALUES('Algeria', 'DZ');
@@ -250,7 +250,6 @@ INSERT INTO countries (name, code) VALUES('Uganda', 'UG');
 INSERT INTO countries (name, code) VALUES('Ukraine', 'UA');
 INSERT INTO countries (name, code) VALUES('United Arab Emirates', 'AE');
 INSERT INTO countries (name, code) VALUES('United Kingdom', 'GB');
-INSERT INTO countries (name, code) VALUES('United States of America', 'US');
 INSERT INTO countries (name, code) VALUES('Uruguay', 'UY');
 INSERT INTO countries (name, code) VALUES('Uzbekistan', 'UZ');
 INSERT INTO countries (name, code) VALUES('Vanuatu', 'VU');
