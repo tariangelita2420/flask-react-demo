@@ -2,10 +2,13 @@ import styles from './SunnyCard.module.css';
 import happysun from '../assets/happysun.png';
 import cloudysun from '../assets/cloudysun.png';
 
-
+// We use props to pass state across different components in React
 export default function SunnyCard (props) {
+    // threshold between good and bad sunrise
     const threshold = 0.5
     return (
+        // Conditionally use CSS classes depending on whether it's a good sunrise or not
+        // Lots of CSS Flexboxes again
         <div className={props['day']['score'] > threshold ? styles['card-sun-container'] : styles['card-cloudy-container']}>
             <h1 className={styles['med-text']}>{props['day']['date']}</h1>
             {props['day']['score'] > threshold ? <img src={happysun} height={250}></img> : <img src={cloudysun} height={250}></img>}

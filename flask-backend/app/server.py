@@ -26,6 +26,27 @@ def get_db_connection():
     conn.row_factory = sqlite3.Row
     return conn
 
+''' route : to retrieve all states and countries
+    endpoint : http://localhost:5000/locations
+    response : {
+  "countries": [
+    [
+      1,
+      "United States of America",
+      "US"
+    ],
+    [
+      2,
+      "Afghanistan",
+      "AF"
+    ],...]
+    "states":[
+        [1,
+        "Alabama",
+        "AL"
+        ], ...
+    ]
+'''
 @app.route('/locations',  methods=['GET'])
 def getLocations():
     conn = get_db_connection()
@@ -38,23 +59,30 @@ def getLocations():
     return {'states' : states, 'countries' : countries}
 
 ''' route : to retrieve weather
-    endpoint : http://localhost:5000/weather?city=Bloomington&state=IL&country=US
+    endpoint : http://localhost:5000/weather?city=Chicago&state=IL&country=US
     response : {
-    "cloudiness": 0,
-    "date": "08 January, 2025",
-    "dewpoint": 6.85,
-    "feelslike": 12.83,
-    "score": 0.9000000000000001,
-    "sunrisetime": "07:17",
-    "temperature": 21.79,
-    "weather": {
-        "description": "clear sky",
-        "icon": "01d",
-        "id": 800,
-        "main": "Clear"
-    },
-    "windspeed": 8.66
-    }
+    "city": "Chicago",
+    "weather": [
+        {
+        "cloudiness": 39,
+        "date": "06 Feb",
+        "dewpoint": 22,
+        "feelslike": 23,
+        "score": 0.5,
+        "sunrisetime": "06:57",
+        "temperature": 32,
+        "weather": {
+            "description": "light snow",
+            "icon": "13d",
+            "id": 600,
+            "main": "Snow"
+        },
+        "windspeed": 19
+        }, ...
+        {...
+        }
+    ]
+}
 '''
 @app.route('/weather', methods=['GET'])
 def getWeather():
