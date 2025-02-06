@@ -2,6 +2,9 @@
 
 This document assumes that you are starting from a *blank slate*. Feel free to skip steps if you have certain software installed prior. 
 
+## 0. Creating your own Project Repository
+- Click on **Fork** to create your own repo and then click **Create Fork**.
+
 ## 1. Install VSCode and Git
 
 ### a. Install VSCode
@@ -30,7 +33,8 @@ This document assumes that you are starting from a *blank slate*. Feel free to s
 - Confirm installation by running `node -v` and `npm -v`
 
 ## 4. Set up Flask+React Demo locally
-- Open up VS Code and in the home page or under Source Control, click on **Clone a Repository**. Choose a directory to store your project on your local computer. You can also do the same from the *command line* using `git clone REPO_URL` you can get the REPO_URL from GitHub. **CURRENT REPO URL** : `https://github.com/Givikap/CS351.git` (could change)
+- Go to your Forked Repository on Github, Click on green **Code** button and copy the URL (using HTTPS or SSH)
+- Open up VS Code and in the home page or under Source Control, click on **Clone a Repository**. Choose a directory to store your project on your local computer. You can also do the same from the *command line* using `git clone REPO_URL`
 - You will now see a local version of all the files/source code from GitHub. 
 ### a. Set up Backend
 - Move into the backend directory - `cd flask-backend` 
@@ -52,19 +56,18 @@ This document assumes that you are starting from a *blank slate*. Feel free to s
 - Install all packages by running `npm install`
 - To run the react frontend, `npm run dev`
 - Your react app is now running on `localhost:5173`!
-- This is what your frontend will look like : 
-
-![screenshot](image-1.png)
 
 ## Notes about Demo Project
 - This app is an oversimplified version of a **sunrise quality calculator**. You interact with the react frontend, which calls the backend which calls a third party API (OpenWeatherMap), retrieves data and displays relevant information in a nice manner. 
+- There is also an sqlite database implemented to store data like states and country names that is also retrieved using the backend API.
 - *Its main purpose is to provide an intro to a simple full stack app.* Your fullstack group project will be/should be much more complex!
-- OpenWeatherMap requires an API key and provides a free tier with 1000 calls a day. 
+- OpenWeatherMap requires an API key and provides a **free tier with 1000 calls a day**. 
 - To *actually* get the app working, set up an account on [OpenWeatherMap's official website](https://openweathermap.org/api) and subscribe to the One Call API 3.0 to get access an API key and make requests.
-- Under flask-backend>app create a file named **.env** with the contents with the following contents : `WEATHER_API_KEY=<insert your API key here>`. .env files are to hold secrets like your API keys and should be ignored by git.
+- Here is the [official API documentation](https://openweathermap.org/api/one-call-3).
+- Under flask-backend>app create a file named **.env** with the contents with the following contents : `WEATHER_API_KEY=<insert your API key here>`. .env files are to hold secrets like your API keys and should be ignored by git. (as sample .env is available)
 
 ## Designing User Interface
-I like starting from Figma when I build web apps. This is not a UI/UX course but if you are interested here is the [Figma Design](https://www.figma.com/design/9wx5ambCgODaaJMdX5H1c6/rise-and-shine?node-id=0-1&t=SF738ptgADYMy1qQ-1) I created for my frontend.
+I like starting from Figma when I build web apps. This is not a UI/UX course but if you are interested here is the [Figma Design](https://www.figma.com/design/9wx5ambCgODaaJMdX5H1c6/rise-and-shine?node-id=0-1&t=SF738ptgADYMy1qQ-1) I created for my frontend. (also, [coolors](https://coolors.co/) for color palettes and [dribble](https://dribbble.com/) for design ideas)
 
 ## Some resources I used:
 This can help you start your own frontend and backend from a blank repository
