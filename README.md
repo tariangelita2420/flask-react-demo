@@ -48,14 +48,14 @@ This document assumes that you are starting from a *blank slate*. Feel free to s
 - Run `cd app` and `python init_db.py` to initialize your database (you will see a database.db pop up)
 - Run `set FLASK_APP=server.py` to set the flask app
 - Run the flask backend in debug mode for automatic reloading : `flask --app server.py --debug run`
-- Your flask server will now be running on `localhost:5000`!
+- Your flask server will now be running on `localhost:PORT`! You can look at the terminal for the port number
 - **Note for Mac users-** if your getting an error `no module named flask_cors`, reactivate your environment while in env by running `source env/bin/activate`
 
 ### b. Set up Frontend
 - Open up a new terminal + button on top right of the terminal and run `cd react-frontend`
 - Install all packages by running `npm install`
 - To run the react frontend, `npm run dev`
-- Your react app is now running on `localhost:5173`!
+- Your react app is now running on `localhost:PORT`! You can follow the link from the terminal for the port number.
 
 ## Notes about Demo Project
 - This app is an oversimplified version of a **sunrise quality calculator**. You interact with the react frontend, which calls the backend which calls a third party API (OpenWeatherMap), retrieves data and displays relevant information in a nice manner. 
